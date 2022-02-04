@@ -166,7 +166,7 @@ func parseValidity(der cryptobyte.String) (time.Time, time.Time, error) {
 			// should be replaced with a call to der.ReadASN1UTCTime.
 			var utc cryptobyte.String
 			if !der.ReadASN1(&utc, cryptobyte_asn1.UTCTime) {
-				return t, errors.New("x509: malformed UTCTime")
+				return t, errors.New("x509: malformed UTCTime, could not read tag")
 			}
 			s := string(utc)
 
@@ -182,7 +182,7 @@ func parseValidity(der cryptobyte.String) (time.Time, time.Time, error) {
 			}
 
 			if serialized := t.Format(formatStr); serialized != s {
-				return t, errors.New("x509: malformed UTCTime")
+				return t, errors.New("x509: malformed UTCTime: " + s)
 			}
 
 			if t.Year() >= 2050 {
